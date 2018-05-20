@@ -28,7 +28,7 @@ Developed using React JS, using Axios to link between backend and frontend.
 ### Running
 ----
 ```
-> docker-compose up -d --build
+> ./run.sh
 ```
 
 This might take a while since both Maven and Node have to install their dependencies.
