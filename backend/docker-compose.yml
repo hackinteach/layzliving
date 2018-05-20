@@ -1,0 +1,31 @@
+version: "3"
+
+networks:
+    webnet:
+      driver: bridge
+
+services:
+
+  backend:
+    build: ./
+    networks:
+      - webnet
+    links:
+      - database
+    ports:
+      - "8080:8080"
+
+  database:
+    image: mysql
+    restart: on-failure
+    volumes:
+      - ./mysql-data:/var/lib/mysql:rw
+    networks:
+      - webnet
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: "webapp_db"
+      MYSQL_USER: "lazyliving"
+      MYSQL_PASSWORD: "oociotproject"
+      MYSQL_ROOT_PASSWORD: "rootrootroot"

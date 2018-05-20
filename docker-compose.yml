@@ -1,0 +1,54 @@
+version: "3"
+
+networks:
+    webnet:
+      driver: bridge
+
+    reverse_proxy:
+      external:
+        name: "reverse_proxy"
+
+services:
+
+  backend:
+    build: ./backend/
+    restart: on-failure
+    networks:
+      - webnet
+      - reverse_proxy
+    links:
+      - database
+    ports:
+      - "8080:8080"
+    environment:
+      VIRTUAL_HOST: "api.layzliving.nuttapat.me"
+      LETSENCRYPT_HOST: "api.layzliving.nuttapat.me"
+      LETSENCRYPT_EMAIL: "webmaster@hackinteach.com"
+
+  frontend:
+    build:
+      context: ./frontend/
+    depends_on:
+      - backend
+    networks:
+      - webnet
+      - reverse_proxy
+    ports:
+      - "5000:5000"
+    environment:
+      VIRTUAL_HOST: "layzliving.nuttapat.me"
+      LETSENCRYPT_HOST: "layzliving.nuttapat.me"
+      LETSENCRYPT_EMAIL: "webmaster@hackinteach.com"
+
+  database:
+    image: mysql
+    restart: on-failure
+    volumes:
+      - ./mysql-data:/var/lib/mysql:rw
+    networks:
+      - webnet
+    environment:
+      MYSQL_DATABASE: "webapp_db"
+      MYSQL_USER: "lazyliving"
+      MYSQL_PASSWORD: "oociotproject"
+      MYSQL_ROOT_PASSWORD: "rootrootroot"

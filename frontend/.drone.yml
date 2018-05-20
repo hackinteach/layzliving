@@ -1,0 +1,39 @@
+pipeline:
+
+  restore-cache:
+    image: drillster/drone-volume-cache
+    restore: true
+    mount:
+      - ./node_modules
+    # Mount the cache volume, needs "Trusted"
+    volumes:
+      - /tmp/cache:/cache
+
+
+  build:
+    image: node:8
+    commands:
+      - npm install
+      - npm run test
+
+  rebuild-cache:
+    image: drillster/drone-volume-cache
+    rebuild: true
+    mount:
+      - ./node_modules
+    # Mount the cache volume, needs "Trusted"
+    volumes:
+      - /tmp/cache:/cache
+
+  slack-notify:
+    image: plugins/slack
+    channel: bitbucket
+    webhook: https://hooks.slack.com/services/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
+    username: drone
+
+  line-notify:
+    image: appleboy/drone-line
+    secrets: [ line_channel_secret, line_channel_token ]
+    to: U3a68bba45ed4f11dc001b7a5cd83f084
+    when:
+     status: [ success, failure ]

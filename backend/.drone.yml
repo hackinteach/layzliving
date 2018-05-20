@@ -1,0 +1,50 @@
+pipeline:
+
+  restore-cache:
+    image: drillster/drone-volume-cache
+    restore: true
+    mount:
+      - /drone/.m2
+    volumes:
+      - /tmp/cache:/cache
+
+  build:
+    image: maven
+    pull: true
+    commands:
+      # - mvn clean package -DskipTests=true
+      - mvn test
+
+  rebuild-cache:
+    image: drillster/drone-volume-cache
+    rebuild: true
+    mount:
+      - /drone/.m2
+    volumes:
+      - /tmp/cache:/cache
+
+  slack-notify:
+    image: plugins/slack
+    channel: bitbucket
+    webhook: https://hooks.slack.com/services/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
+    username: drone
+    when:
+      status: [ success, failure ]
+
+  line-notify:
+    image: appleboy/drone-line
+    ## Need token setup in drone page
+    secrets: [ line_channel_secret, line_channel_token ]
+    to: U3a68bba45ed4f11dc001b7a5cd83f084
+    when:
+     status: [ success, failure ]
+
+services:
+  database:
+    image: mysql
+    environment:
+      - MYSQL_DATABASE=webapp_db
+      - MYSQL_USER=lazyliving
+      - MYSQL_PASSWORD=oociotproject
+      - MYSQL_ROOT_PASSWORD=rootrootroot
+      # - MYSQL_ALLOW_EMPTY_PASSWORD=yes

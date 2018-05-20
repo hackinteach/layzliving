@@ -1,0 +1,7 @@
+.idea/
+.DS_STORE/
+target/
+*.iml
+mysql-data/
+mvnw*
+yarn-error.log

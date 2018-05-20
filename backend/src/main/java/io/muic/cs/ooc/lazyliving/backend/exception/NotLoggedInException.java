@@ -1,0 +1,9 @@
+package io.muic.cs.ooc.lazyliving.backend.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(value= HttpStatus.UNAUTHORIZED,reason="Not Logged in")
+public class NotLoggedInException extends RuntimeException{
+
+}
