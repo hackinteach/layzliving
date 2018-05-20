@@ -9,7 +9,7 @@ UI based on [Material Dashboard React](https://www.creative-tim.com/product/mate
 ### Cloning Repository
 ------
 ```
-> git clone --recursive <link>
+> git clone --recursive https://github.com/hackinteach/layzliving.git
 ```
 
 ### Sub folder details
